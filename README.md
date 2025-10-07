@@ -1,4 +1,4 @@
-# ☸️ Mastering GKE — 14-Day Hands-On Learning Series
+# ☸️ Mastering GKE — 20+ - Days Hands-On Learning Series
 
 A complete **hands-on guide to mastering Google Kubernetes Engine (GKE)** — from Kubernetes fundamentals to advanced cluster operations.  
 Each day covers one key concept with **practical labs**, **YAML manifests**, and **Google Cloud examples** to help you build real-world DevOps skills.

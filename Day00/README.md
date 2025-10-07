@@ -63,7 +63,7 @@ docker run -d --name backend3 nginx
 docker run -d --name backend4 nginx
 ```
 
-*** Observation: ***
+#### Observation: 
 
   - Docker works fine for single-host deployments.
 

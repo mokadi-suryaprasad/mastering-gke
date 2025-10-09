@@ -23,18 +23,18 @@ This repository helps you:
 |-----|--------|-------------|
 | 🧠 *Day 00* | Why Container Orchestration | Why Docker alone isn’t enough — intro to orchestration |
 | 🏗️ *Day 01* | Kubernetes Architecture | Control Plane, Node components, API Server, Scheduler, Controller Manager |
-| ☁️ *Day 03* | **GKE Private Cluster** | Provision a **secure, private GKE cluster** using **Terraform**, with custom VPC, subnets, Cloud NAT, and IAM-based access control |
-| 🧩 *Day 04* | Pods | Core execution unit — single & multi-container pods |
-| ⚙️ *Day 05* | Deployments | Manage ReplicaSets, rollouts, and rollbacks |
-| 🌐 *Day 06* | Services | Expose workloads (ClusterIP, NodePort, LoadBalancer) |
-| 🧱 *Day 07* | StatefulSets | Manage stateful apps (e.g., databases) using PVs/PVCs |
-| ⚙️ *Day 08* | DaemonSets | Run agents on every node (monitoring/logging) |
-| 🚪 *Day 09* | Ingress | HTTP(S) load balancing and path-based routing |
-| ❤️ *Day 10* | Health Probes | Liveness and readiness probes for reliability |
-| 📏 *Day 11* | Resource Quotas & Limits | Manage CPU/memory usage per namespace |
-| 💾 *Day 12* | Storage: PVs & Filesystems | Work with PersistentVolumes and PersistentVolumeClaims |
-| 🗄️ *Day 13* | Cloud SQL Integration | Secure GKE to Cloud SQL connectivity |
-| 📍 *Day 14* | Node Selector & Affinity | Pod scheduling rules based on node labels |
+| ☁️ *Day 02* | **GKE Private Cluster** | Provision a **secure, private GKE cluster** using **Terraform**, with custom VPC, subnets, Cloud NAT, and IAM-based access control |
+| 🧩 *Day 03* | Pods | Core execution unit — single & multi-container pods |
+| ⚙️ *Day 04* | Deployments | Manage ReplicaSets, rollouts, and rollbacks |
+| 🌐 *Day 05* | Services | Expose workloads (ClusterIP, NodePort, LoadBalancer) |
+| 🧱 *Day 06* | StatefulSets | Manage stateful apps (e.g., databases) using PVs/PVCs |
+| ⚙️ *Day 07* | DaemonSets | Run agents on every node (monitoring/logging) |
+| 🚪 *Day 08* | Ingress | HTTP(S) load balancing and path-based routing |
+| ❤️ *Day 09* | Health Probes | Liveness and readiness probes for reliability |
+| 📏 *Day 10* | Resource Quotas & Limits | Manage CPU/memory usage per namespace |
+| 💾 *Day 11* | Storage: PVs & Filesystems | Work with PersistentVolumes and PersistentVolumeClaims |
+| 🗄️ *Day 12* | Cloud SQL Integration | Secure GKE to Cloud SQL connectivity |
+| 📍 *Day 13* | Node Selector & Affinity | Pod scheduling rules based on node labels |
 
 ---
 

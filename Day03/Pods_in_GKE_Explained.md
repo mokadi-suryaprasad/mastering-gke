@@ -41,17 +41,96 @@ Kubernetes doesn’t run containers directly — it always wraps them inside Pod
 
 ---
 
+## 🚀 Creating Pods in Kubernetes
+
+There are **two main ways** to create Pods in Kubernetes:
+1. **Imperative way** — using direct commands.
+2. **Declarative way** — using YAML manifests.
+
+---
+
+### ⚙️ 1️⃣ Imperative Way (Direct Command)
+
+This method uses the `kubectl run` command.
+
+#### 🧩 Example:
+```bash
+kubectl run my-nginx-pod --image=nginx --port=80
+```
+
+#### 📖 What happens:
+- Kubernetes creates a Pod named **my-nginx-pod**.
+- It pulls the **nginx** image from Docker Hub.
+- The Pod runs a container listening on port 80.
+
+#### 🧠 To verify:
+```bash
+kubectl get pods
+kubectl describe pod my-nginx-pod
+kubectl logs my-nginx-pod
+```
+
+#### 🗑️ To delete the Pod:
+```bash
+kubectl delete pod my-nginx-pod
+```
+
+> 💬 The **imperative approach** is quick and good for testing, but not recommended for production since it doesn’t provide version control or reusability.
+
+---
+
+### 🧾 2️⃣ Declarative Way (Using YAML File)
+
+In this method, we define Pod specifications in a YAML file and apply it using `kubectl apply`.
+
+#### 🧩 Example: `nginx-pod.yaml`
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+```
+
+#### 📖 Apply the file:
+```bash
+kubectl apply -f nginx-pod.yaml
+```
+
+#### 🧠 To verify:
+```bash
+kubectl get pods
+kubectl describe pod nginx-pod
+kubectl logs nginx-pod
+```
+
+#### 🗑️ To delete:
+```bash
+kubectl delete -f nginx-pod.yaml
+```
+
+> 💬 The **declarative approach** is preferred for production because you can store the YAML in Git, reuse it, and manage changes easily.
+
+---
+
 ## 🚫 Why We Don’t Create Pods Directly
 
-Creating Pods directly with `kubectl run` or YAML files might seem easy,  
-but it’s **not reliable for production**.  
+Creating Pods directly (imperatively or declaratively) works,  
+but it’s **not ideal for production** environments.
 
 | Problem | Explanation |
 |----------|--------------|
-| ❌ **No Auto Healing** | If a Pod crashes, it won’t restart automatically. You must recreate it manually. |
-| ❌ **No Scaling** | You cannot easily increase or decrease the number of Pods. |
-| ❌ **No Rolling Updates** | You cannot update a new version of the Pod without downtime. |
-| ❌ **No History or Version Control** | You lose track of what changed and when. |
+| ❌ **No Auto Healing** | If a Pod crashes, it won’t restart automatically. |
+| ❌ **No Scaling** | You can’t easily scale Pods manually. |
+| ❌ **No Rolling Updates** | You can’t roll out new versions smoothly. |
+| ❌ **No Version History** | You can’t track changes over time. |
 
 ---
 

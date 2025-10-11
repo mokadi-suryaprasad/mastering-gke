@@ -1,0 +1,6 @@
+apiVersion: v2
+name: shop-frontend
+description: A Helm chart for shop-frontend microservice
+type: application
+version: 1.0.0
+appVersion: "1.0"

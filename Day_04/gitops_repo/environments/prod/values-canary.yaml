@@ -1,0 +1,8 @@
+replicaCount: 1
+image:
+  repository: shop-frontend
+  tag: 1.1
+version: canary
+service:
+  type: ClusterIP
+  port: 80

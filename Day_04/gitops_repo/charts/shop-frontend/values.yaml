@@ -1,0 +1,8 @@
+replicaCount: 3
+image:
+  repository: shop-frontend
+  tag: 1.0
+version: stable
+service:
+  type: ClusterIP
+  port: 80

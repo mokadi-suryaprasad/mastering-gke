@@ -1,0 +1,8 @@
+replicaCount: 2
+image:
+  repository: shop-frontend
+  tag: dev
+version: dev
+service:
+  type: ClusterIP
+  port: 80

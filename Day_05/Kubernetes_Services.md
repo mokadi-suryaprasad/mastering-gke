@@ -1,6 +1,6 @@
 # 🌐 Day_05 — Kubernetes Services
 
-In this lesson, we will focus on **three important aspects of Kubernetes Services**:
+In this Day_05, we will focus on **three important aspects of Kubernetes Services**:
 
 1️⃣ **Load Balancing** — distribute traffic across multiple Pod replicas to ensure high availability.
 

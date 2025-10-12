@@ -17,7 +17,7 @@ Examples:
 - Messaging systems (Kafka, RabbitMQ)
 
 Solution: StatefulSets
-StatefulSets manage stateful workloads with stable pod names, ordered creation, and persistent storage.
+- StatefulSets manage stateful workloads with stable pod names, ordered creation, and persistent storage.
 
 ## 2️⃣ Key Features of StatefulSets
 

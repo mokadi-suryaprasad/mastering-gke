@@ -1,52 +1,137 @@
-
 # 🧱 Day 06 — StatefulSets
 
 ## 🧠 Topic: Running Stateful Workloads using PVs/PVCs in GKE
 
+---
+
 ## 1️⃣ Why StatefulSets Exist
 
-In Kubernetes (and GKE), Deployments are good for stateless apps like web servers.
+In Kubernetes (and GKE), **Deployments** are good for **stateless apps** like web servers.
 
-But some apps require state, meaning:
-- Each instance needs a unique identity (mysql-0, mysql-1)
-- Each instance needs its own persistent storage
-- Pods must start in order to maintain consistency
+But some apps **require state**, meaning:
+
+- Each instance needs a **unique identity** (`mysql-0`, `mysql-1`)  
+- Each instance needs **its own persistent storage**  
+- Pods must start **in order** to maintain consistency  
 
 Examples:
-- Databases (MySQL, PostgreSQL)
-- Messaging systems (Kafka, RabbitMQ)
 
-Solution: StatefulSets
-- StatefulSets manage stateful workloads with stable pod names, ordered creation, and persistent storage.
+- Databases (MySQL, PostgreSQL)  
+- Messaging systems (Kafka, RabbitMQ)  
+
+**Solution:** StatefulSets  
+
+- StatefulSets manage **stateful workloads** with **stable pod names, ordered creation, and persistent storage**.
+
+---
 
 ## 2️⃣ Key Features of StatefulSets
 
 | Feature | Description |
 |---------|-------------|
-| Stable Network Identity | Pods get predictable DNS names (mysql-0.mysql) |
+| Stable Network Identity | Pods get predictable DNS names (`mysql-0.mysql`) |
 | Stable Storage | Each Pod has its own PersistentVolumeClaim (PVC) |
-| Ordered Deployment & Scaling | Pods are created one by one: 0 → 1 → 2 |
-| Ordered Deletion & Updates | Pods are deleted in reverse order: 2 → 1 → 0 |
+| Ordered Deployment & Scaling | Pods are created one by one: `0 → 1 → 2` |
+| Ordered Deletion & Updates | Pods are deleted in reverse order: `2 → 1 → 0` |
+
+---
 
 ## 3️⃣ StatefulSet vs Deployment
 
 | Aspect | Deployment | StatefulSet |
 |--------|-----------|-------------|
-| Pod Names | Random | Stable (app-0, app-1) |
+| Pod Names | Random | Stable (`app-0`, `app-1`) |
 | Storage | Shared or ephemeral | Persistent (one PV per Pod) |
-| Pod Creation Order | Parallel | Sequential (0 → 1 → 2) |
+| Pod Creation Order | Parallel | Sequential (`0 → 1 → 2`) |
 | Use Case | Stateless apps | Stateful apps (databases, queues) |
 
-## 4️⃣ PersistentVolume and PersistentVolumeClaim
+---
 
-- PersistentVolume (PV): Storage in the cluster.
-- PersistentVolumeClaim (PVC): Request for storage by a Pod.
+## 4️⃣ PersistentVolume (PV) and PersistentVolumeClaim (PVC)
 
-StatefulSets use PVC templates to automatically assign unique storage to each Pod.
+- **PersistentVolume (PV):** Storage resource in the cluster.  
+- **PersistentVolumeClaim (PVC):** Request for storage by a Pod.  
 
-## 5️⃣ Example: MySQL StatefulSet
+StatefulSets use **PVC templates** to automatically assign **unique storage** to each Pod.
 
-### 5.1 Headless Service (required)
+---
+
+## 5️⃣ Step-by-Step GKE Storage Creation
+
+In GKE, you can use **Dynamic Provisioning** or **Static PV creation**.
+
+### 5.1 Create a PersistentVolume (optional - static)
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-0
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  gcePersistentDisk:
+    pdName: mysql-disk-0
+    fsType: ext4
+```
+
+```bash
+kubectl apply -f mysql-pv.yaml
+kubectl get pv
+```
+
+---
+
+### 5.2 Create a PersistentVolumeClaim (PVC)
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc-0
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+```
+
+```bash
+kubectl apply -f mysql-pvc.yaml
+kubectl get pvc
+```
+
+> In StatefulSets, PVC templates automatically create PVCs for each Pod, so you often don’t need to create PV/PVC manually if dynamic provisioning is enabled.
+
+---
+
+### 5.3 Use PVC in StatefulSet
+
+```yaml
+volumeClaimTemplates:
+- metadata:
+    name: mysql-storage
+  spec:
+    accessModes: [ "ReadWriteOnce" ]
+    resources:
+      requests:
+        storage: 1Gi
+```
+
+- Each Pod in the StatefulSet will get a **unique PVC**:  
+  `mysql-storage-mysql-0`, `mysql-storage-mysql-1`, `mysql-storage-mysql-2`  
+
+---
+
+## 6️⃣ Example: MySQL StatefulSet
+
+### 6.1 Headless Service
 
 ```yaml
 apiVersion: v1
@@ -62,7 +147,7 @@ spec:
     app: mysql
 ```
 
-### 5.2 StatefulSet YAML
+### 6.2 StatefulSet YAML
 
 ```yaml
 apiVersion: apps/v1
@@ -101,16 +186,19 @@ spec:
           storage: 1Gi
 ```
 
-## 6️⃣ Ordered Creation in StatefulSets
+---
 
-When creating 3 replicas:
-1. Pod mysql-0 is created first, PVC mysql-storage-mysql-0 is bound, Pod becomes Ready.
-2. Pod mysql-1 is created next, PVC mysql-storage-mysql-1 is bound, Pod starts after Pod 0 is Ready.
-3. Pod mysql-2 is created last, PVC mysql-storage-mysql-2 is bound, Pod starts after Pod 1 is Ready.
+## 7️⃣ Ordered Creation in StatefulSets
 
-If Pod 0 fails, Pods 1 and 2 wait to ensure correct stateful behavior.
+1. Pod `mysql-0` is created first, PVC bound, Pod Ready  
+2. Pod `mysql-1` is created next, PVC bound, starts after Pod 0 Ready  
+3. Pod `mysql-2` is created last, PVC bound, starts after Pod 1 Ready  
 
-## 7️⃣ Visual Diagram
+> If Pod 0 fails, Pods 1 and 2 wait to ensure correct stateful behavior.
+
+---
+
+## 8️⃣ Visual Diagram
 
 ```
 StatefulSet: mysql (replicas: 3)
@@ -129,7 +217,9 @@ Pod 2: mysql-2
   DNS: mysql-2.mysql
 ```
 
-## 8️⃣ Commands to Try
+---
+
+## 9️⃣ Commands to Try
 
 ```bash
 kubectl apply -f mysql-service.yaml
@@ -139,10 +229,13 @@ kubectl get pvc
 kubectl describe pod mysql-0
 ```
 
+---
+
 ## ✅ Summary
 
-- StatefulSets are for stateful applications.
-- Pods have stable identities and persistent storage.
-- Pods are created, scaled, and deleted in order.
-- PVC templates ensure each Pod gets unique storage.
-- Required for databases, queues, and any app that needs state.
+- StatefulSets are for **stateful applications**.  
+- Pods have **stable identities** and **persistent storage**.  
+- Pods are **created, scaled, and deleted in order**.  
+- PVC templates ensure each Pod gets **unique storage**.  
+- Required for **databases, queues, and any app that needs state**.  
+- In GKE, PVs can be **dynamically provisioned** or **statically created** for complete control.

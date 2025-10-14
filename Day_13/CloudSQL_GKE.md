@@ -11,7 +11,7 @@ description: Use GCP Cloud SQL MySQL DB for GKE Workloads
 gcloud container clusters get-credentials <CLUSTER-NAME> --zone <ZONE> --project <PROJECT>
 
 # Replace Values CLUSTER-NAME, ZONE, PROJECT
-gcloud container clusters get-credentials standard-cluster-1 --zone us-central1-c --project kdaida123
+gcloud container clusters get-credentials standard-cluster-1 --zone us-central1-c --project surya
 ```
 
 ## Step-01: Introduction
@@ -21,7 +21,7 @@ gcloud container clusters get-credentials standard-cluster-1 --zone us-central1-
 ## Step-02: Create Google Cloud SQL MySQL Instance
 - Go to SQL -> Choose MySQL
 - **Instance ID:** ums-db-public-instance
-- **Password:** KalyanReddy13
+- **Password:** suryaprasad13
 - **Database Version:** MYSQL 8.0
 - **Choose a configuration to start with:** Development
 - **Choose region and zonal availability**
@@ -100,9 +100,9 @@ type: Opaque
 data: 
   db-password: S2FseWFuUmVkZHkxMw==
 
-# Base64 of KalyanReddy13
+# Base64 of suryaprasad13
 # https://www.base64encode.org/
-# Base64 of KalyanReddy13 is S2FseWFuUmVkZHkxMw==
+# Base64 of suryaprasad13 is S2FseWFuUmVkZHkxMw==
 ```
 
 ## Step-07: 03-UserMgmtWebApp-Deployment.yaml
@@ -294,7 +294,7 @@ gcloud container clusters get-credentials standard-cluster-private-1 --region us
 ## Step-03: Create Google Cloud SQL MySQL Instance
 - Go to SQL -> Choose MySQL
 - **Instance ID:** ums-db-private-instance
-- **Password:** KalyanReddy13
+- **Password:** suryaprasad13
 - **Database Version:** MYSQL 8.0
 - **Choose a configuration to start with:** Development
 - **Choose region and zonal availability**
@@ -352,9 +352,9 @@ type: Opaque
 data: 
   db-password: S2FseWFuUmVkZHkxMw==
 
-# Base64 of KalyanReddy13
+# Base64 of suryaprasad13
 # https://www.base64encode.org/
-# Base64 of KalyanReddy13 is S2FseWFuUmVkZHkxMw==
+# Base64 of suryaprasad13 is S2FseWFuUmVkZHkxMw==
 ```
 
 ## Step-07: 03-UserMgmtWebApp-Deployment.yaml
@@ -457,7 +457,7 @@ Password: password101
 kubectl run -it --rm --image=mysql:8.0 --restart=Never mysql-client -- mysql -h <Kubernetes-ExternalName-Service> -u <USER_NAME> -p<PASSWORD>
 
 # MySQL Client 8.0: Replace External Name Service, Username and Password
-kubectl run -it --rm --image=mysql:8.0 --restart=Never mysql-client -- mysql -h mysql-externalname-service -u root -pKalyanReddy13
+kubectl run -it --rm --image=mysql:8.0 --restart=Never mysql-client -- mysql -h mysql-externalname-service -u root -psuryaprasad13
 
 mysql> show schemas;
 mysql> use webappdb;
@@ -478,11 +478,11 @@ Username: admin102
 Password: password102
 First Name: fname102
 Last Name: lname102
-Email Address: admin102@stacksimplify.com
+Email Address: admin102@suryaprasad.com
 Social Security Address: ssn102
 
 # MySQL Client 8.0: Replace External Name Service, Username and Password
-kubectl run -it --rm --image=mysql:8.0 --restart=Never mysql-client -- mysql -h mysql-externalname-service -u root -pKalyanReddy13
+kubectl run -it --rm --image=mysql:8.0 --restart=Never mysql-client -- mysql -h mysql-externalname-service -u root -psuryaprasad13
 
 mysql> show schemas;
 mysql> use webappdb;
@@ -523,7 +523,7 @@ description: Use GCP Cloud SQL MySQL DB for GKE Workloads without ExternalName S
 gcloud container clusters get-credentials <CLUSTER-NAME> --region <REGION> --project <PROJECT>
 
 # Replace Values CLUSTER-NAME, ZONE, PROJECT
-gcloud container clusters get-credentials standard-cluster-private-1 --region us-central1 --project kdaida123
+gcloud container clusters get-credentials standard-cluster-private-1 --region us-central1 --project surya
 ```
 
 ## Step-01: Introduction

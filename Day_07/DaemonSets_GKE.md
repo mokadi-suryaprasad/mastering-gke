@@ -77,7 +77,7 @@ You can create graphs, alerts, and dashboards to visualize what’s happening in
 ---
 ### 🧩 Prometheus + Grafana Architecture Diagram
 
-``` text
+```text
 +-----------------------------+
 |         Grafana UI          |
 |  (Dashboards & Alerts)      |

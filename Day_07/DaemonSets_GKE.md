@@ -28,7 +28,7 @@ If nodes are removed, the Pods are automatically cleaned up.
 - **Security Agents** – like Falco for runtime security.
 
 ### 🧩 Diagram: DaemonSet Concept
-
+```text
 +---------------------------------------------+
 | Kubernetes Cluster |
 +---------------------------------------------+
@@ -38,7 +38,7 @@ If nodes are removed, the Pods are automatically cleaned up.
 | Pod                                             | Pod    | Pod    | Pod    |
 | (DS)                                            | (DS)   | (DS)   | (DS)   |
 | +---------------------------------------------+ |        |        |        |
-
+```
 
 👉 **DaemonSet automatically ensures one Pod per node.**
 
@@ -75,6 +75,9 @@ You can create graphs, alerts, and dashboards to visualize what’s happening in
 3. **Grafana** connects to Prometheus to show the data in graphs.
 
 ---
+### 🧩 Prometheus + Grafana Architecture Diagram
+
+```text
 +-----------------------------+
 |         Grafana UI          |
 |  (Dashboards & Alerts)      |
@@ -91,6 +94,7 @@ You can create graphs, alerts, and dashboards to visualize what’s happening in
 | Node Exporters / App Metrics|
 | (Expose /metrics endpoints) |
 +-----------------------------+
+```
 
 ---
 ### 🧠 Example Metrics You Can Monitor
@@ -123,8 +127,9 @@ It includes:
 3. Fluentd sends those logs to **Elasticsearch**.  
 4. **Kibana** connects to Elasticsearch and shows logs in the web UI.
 
----
+### 🧩 EFK Stack Architecture Diagram
 
+```text
 +------------------------------+
 |           Kibana             |
 |   (Visualize & Search Logs)  |
@@ -147,6 +152,7 @@ It includes:
 |  Kubernetes Nodes & Pods      |
 | (Generate Application Logs)   |
 +------------------------------+
+```
 
 ---
 
@@ -170,8 +176,9 @@ This is very useful when one request passes through many services — for exampl
 
 You can use Jaeger to **trace how long each service took** and find **bottlenecks** or **failures**.
 
----
+### 🧩 Jaeger Architecture Diagram
 
+```text
 +------------------------------+
 |          Jaeger UI           |
 |        (View Traces)         |
@@ -200,8 +207,10 @@ You can use Jaeger to **trace how long each service took** and find **bottleneck
 | Instrumented Applications     |
 |      (Send Trace Data)        |
 +------------------------------+
+```
 
 ---
+
 
 ### 🧠 Example Use Cases
 

@@ -75,29 +75,24 @@ You can create graphs, alerts, and dashboards to visualize what’s happening in
 3. **Grafana** connects to Prometheus to show the data in graphs.
 
 ---
-
-### 🧩 Prometheus + Grafana Architecture Diagram
-
 +-----------------------------+
-| Grafana UI |
-| (Dashboards & Alerts) |
+|         Grafana UI          |
+|  (Dashboards & Alerts)      |
 +-------------+---------------+
-|
-v
+              |
+              v
 +-------------+---------------+
-| Prometheus |
-| (Collects & Stores Metrics) |
+|           Prometheus         |
+|   (Collects & Stores Metrics)|
 +-------------+---------------+
-|
-v
-+-------------+---------------+
+              |
+              v
++-----------------------------+
 | Node Exporters / App Metrics|
 | (Expose /metrics endpoints) |
 +-----------------------------+
 
-
 ---
-
 ### 🧠 Example Metrics You Can Monitor
 
 | Type | Example |
@@ -130,31 +125,28 @@ It includes:
 
 ---
 
-### 🧩 EFK Stack Architecture Diagram
-
 +------------------------------+
-| Kibana |
-| (Visualize & Search Logs) |
+|           Kibana             |
+|   (Visualize & Search Logs)  |
 +--------------+---------------+
-|
-v
+               |
+               v
 +--------------+---------------+
-| Elasticsearch |
-| (Stores and Indexes Logs) |
+|       Elasticsearch           |
+|   (Stores and Indexes Logs)   |
 +--------------+---------------+
-^
-|
+               ^
+               |
 +--------------+---------------+
-| Fluentd DaemonSet |
-| (Collect Logs from Nodes) |
+|     Fluentd DaemonSet         |
+| (Collect Logs from Nodes)     |
 +--------------+---------------+
-^
-|
+               ^
+               |
 +--------------+---------------+
-| Kubernetes Nodes & Pods |
-| (Generate Application Logs) |
+|  Kubernetes Nodes & Pods      |
+| (Generate Application Logs)   |
 +------------------------------+
-
 
 ---
 
@@ -180,37 +172,34 @@ You can use Jaeger to **trace how long each service took** and find **bottleneck
 
 ---
 
-### 🧩 Jaeger Architecture Diagram
-
 +------------------------------+
-| Jaeger UI |
-| (View Traces) |
+|          Jaeger UI           |
+|        (View Traces)         |
 +--------------+---------------+
-|
-v
+               |
+               v
 +--------------+---------------+
-| Query Service |
-| (Fetch trace data) |
+|        Query Service          |
+|      (Fetch Trace Data)       |
 +--------------+---------------+
-|
-v
+               |
+               v
 +--------------+---------------+
-| Collector Service |
-| (Receives spans & traces) |
+|      Collector Service        |
+|  (Receives Spans & Traces)    |
 +--------------+---------------+
-^
-|
+               ^
+               |
 +--------------+---------------+
-| Jaeger Agent DaemonSet |
-| (Receives traces from Apps) |
+|   Jaeger Agent DaemonSet      |
+| (Receives Traces from Apps)   |
 +--------------+---------------+
-^
-|
+               ^
+               |
 +--------------+---------------+
-| Instrumented Applications |
-| (Send Trace Data) |
+| Instrumented Applications     |
+|      (Send Trace Data)        |
 +------------------------------+
-
 
 ---
 

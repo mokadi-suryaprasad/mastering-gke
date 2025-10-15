@@ -1,173 +1,312 @@
-# 🧩 Day 07 — DaemonSets
-
-## 🧠 Topic: Running Cluster-wide Agents using DaemonSets in GKE
+# 🧩 Day 07 — DaemonSets, Prometheus, Grafana, EFK, and Jaeger
 
 ---
 
-## 1️⃣ Why DaemonSets Exist
+## 🎯 Learning Objectives
 
-Some applications or agents need to run **on every node** in the cluster. Examples:
+By the end of this lesson, you will clearly understand:
 
-- Monitoring agents (Prometheus node exporter, Datadog agent)  
-- Logging agents (Fluentd, Filebeat)  
-- Security agents or network tools  
-
-**Problem:** If you use a Deployment, Pods may only run on some nodes. You want **one Pod per node automatically**.  
-
-**Solution:** **DaemonSets**  
-
-- DaemonSets ensure **a copy of a Pod runs on every node** (or selected nodes).  
-- When new nodes are added, DaemonSet automatically creates a Pod on them.  
-- When nodes are removed, the Pod is deleted automatically.
+- What is a **DaemonSet** in Kubernetes.
+- How **Prometheus** and **Grafana** help in monitoring.
+- How the **EFK Stack (Elasticsearch, Fluentd, Kibana)** helps in logging.
+- How **Jaeger** helps in distributed tracing.
+- How all these tools work together in a real Kubernetes environment.
 
 ---
 
-## 2️⃣ Key Features of DaemonSets
+## 🌀 1. What is a DaemonSet?
 
-| Feature | Description |
-|---------|-------------|
-| Cluster-wide Deployment | Runs one Pod per node (or per node selector) |
-| Auto-scaling with Nodes | When a new node joins, DaemonSet Pod is created automatically |
-| Pod Management | Supports updates and deletions similar to Deployments |
-| Node Selection | Can restrict Pods to specific nodes using `nodeSelector` or `affinity` |
+A **DaemonSet** ensures that **one copy of a Pod runs on every node** in the Kubernetes cluster.  
+If new nodes are added, Kubernetes automatically schedules the DaemonSet Pod on them too.  
+If nodes are removed, the Pods are automatically cleaned up.
 
----
+### ✅ Example Use Cases
 
-## 3️⃣ Common Use Cases
+- **Fluentd** – for collecting logs from every node.  
+- **Node Exporter** – for collecting metrics from every node.  
+- **Jaeger Agent** – for tracing requests in each node.  
+- **Security Agents** – like Falco for runtime security.
 
-- **Monitoring:** Prometheus Node Exporter  
-- **Logging:** Fluentd, Filebeat  
-- **Security & Compliance:** Falco, Sysdig  
-- **Networking:** Calico, Cilium agents  
+### 🧩 Diagram: DaemonSet Concept
 
----
++---------------------------------------------+
+| Kubernetes Cluster |
++---------------------------------------------+
 
-## 4️⃣ Example: Fluentd Logging DaemonSet
+| Node 1                                          | Node 2 | Node 3 | Node 4 |
+| ----------------------------------------------- | ------ | ------ | ------ |
+| Pod                                             | Pod    | Pod    | Pod    |
+| (DS)                                            | (DS)   | (DS)   | (DS)   |
+| +---------------------------------------------+ |        |        |        |
 
-### 4.1 Namespace (optional)
 
-```yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: logging
-```
-
-```bash
-kubectl apply -f namespace.yaml
-```
+👉 **DaemonSet automatically ensures one Pod per node.**
 
 ---
 
-### 4.2 DaemonSet YAML
+## 📊 2. Prometheus and Grafana — Monitoring Stack
 
-```yaml
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: fluentd
-  namespace: logging
-spec:
-  selector:
-    matchLabels:
-      app: fluentd
-  template:
-    metadata:
-      labels:
-        app: fluentd
-    spec:
-      containers:
-      - name: fluentd
-        image: fluent/fluentd:v1.15-1
-        resources:
-          limits:
-            memory: 200Mi
-            cpu: 200m
-        volumeMounts:
-        - name: varlog
-          mountPath: /var/log
-      volumes:
-      - name: varlog
-        hostPath:
-          path: /var/log
-```
+Monitoring is one of the most important parts of DevOps and cloud management.
+
+### 🔍 What is Prometheus?
+
+**Prometheus** is an open-source **monitoring system**.  
+It collects **metrics** (numbers and statistics) from your applications, pods, and nodes.  
+It uses a **pull-based model**, meaning it **pulls metrics** from applications that expose data on `/metrics` endpoints.
+
+Prometheus stores this data in a **time-series database** — data stored over time, like:
+- CPU usage over time  
+- Memory usage over time  
+- Request rate per second
+
+### 📈 What is Grafana?
+
+**Grafana** is a **visualization and dashboard tool**.  
+It connects to Prometheus (and other data sources) and shows the metrics in beautiful charts and dashboards.
+
+You can create graphs, alerts, and dashboards to visualize what’s happening inside your system.
 
 ---
 
-### 4.3 Explanation
+### ⚙️ Prometheus + Grafana Working Flow
 
-- `hostPath` allows the Pod to **read logs from the host node**.  
-- One Pod is scheduled on **every node automatically**.  
-- If a new node joins, Kubernetes adds a Fluentd Pod to that node.  
-- When a node is removed, the Pod is deleted automatically.
-
----
-
-## 5️⃣ Node Selector & Tolerations (Optional)
-
-You can **run DaemonSet only on certain nodes** using `nodeSelector`:
-
-```yaml
-spec:
-  template:
-    spec:
-      nodeSelector:
-        node-role.kubernetes.io/worker: ""
-```
-
-You can also add **tolerations** to schedule on tainted nodes (like master nodes in GKE):
-
-```yaml
-tolerations:
-- key: "node-role.kubernetes.io/master"
-  operator: "Exists"
-  effect: "NoSchedule"
-```
+1. **Applications** or **Node Exporters** expose metrics on `/metrics`.
+2. **Prometheus** scrapes those metrics at regular intervals.
+3. **Grafana** connects to Prometheus to show the data in graphs.
 
 ---
 
-## 6️⃣ Commands to Try
+### 🧩 Prometheus + Grafana Architecture Diagram
 
-```bash
-# Apply namespace
-kubectl apply -f namespace.yaml
++-----------------------------+
+| Grafana UI |
+| (Dashboards & Alerts) |
++-------------+---------------+
+|
+v
++-------------+---------------+
+| Prometheus |
+| (Collects & Stores Metrics) |
++-------------+---------------+
+|
+v
++-------------+---------------+
+| Node Exporters / App Metrics|
+| (Expose /metrics endpoints) |
++-----------------------------+
 
-# Apply DaemonSet
-kubectl apply -f fluentd-daemonset.yaml
-
-# Check all Pods (one per node)
-kubectl get pods -n logging -o wide
-
-# Describe a Pod
-kubectl describe pod fluentd-xxxxx -n logging
-
-# Delete DaemonSet (it deletes Pods automatically)
-kubectl delete ds fluentd -n logging
-```
-
----
-
-## 7️⃣ Visual Diagram
-
-```
-Cluster Nodes: node1, node2, node3
-
-DaemonSet: fluentd
--------------------------------------
-Pod: fluentd-node1  --> runs on node1
-Pod: fluentd-node2  --> runs on node2
-Pod: fluentd-node3  --> runs on node3
-```
-
-- Every node has **one Pod** from the DaemonSet.  
-- Automatic scaling with new nodes.  
 
 ---
 
-## ✅ Summary
+### 🧠 Example Metrics You Can Monitor
 
-- **DaemonSets** are for running **cluster-wide agents**.  
-- Ensure **one Pod per node** (monitoring/logging/security).  
-- Supports **node selectors and tolerations** for fine control.  
-- Automatically **creates Pods on new nodes** and **removes Pods from deleted nodes**.  
-- Ideal for **monitoring, logging, and cluster-level management tools**.
+| Type | Example |
+|------|----------|
+| Node | CPU, Memory, Disk, Network |
+| Pod | Container restarts, resource usage |
+| Application | Request rate, errors, latency |
+
+---
+
+## 🪵 3. EFK Stack — Logging Solution
+
+The **EFK Stack** is used to collect, store, and view logs in Kubernetes.  
+It includes:
+
+| Tool | Description |
+|------|--------------|
+| **Elasticsearch** | Stores and indexes logs so you can search them. |
+| **Fluentd** | Collects logs from each Pod and sends them to Elasticsearch. |
+| **Kibana** | Visual tool to view and analyze the logs. |
+
+---
+
+### 🔧 How It Works
+
+1. **Fluentd** runs as a **DaemonSet** on every node.  
+2. It reads container logs from `/var/log/containers/`.  
+3. Fluentd sends those logs to **Elasticsearch**.  
+4. **Kibana** connects to Elasticsearch and shows logs in the web UI.
+
+---
+
+### 🧩 EFK Stack Architecture Diagram
+
++------------------------------+
+| Kibana |
+| (Visualize & Search Logs) |
++--------------+---------------+
+|
+v
++--------------+---------------+
+| Elasticsearch |
+| (Stores and Indexes Logs) |
++--------------+---------------+
+^
+|
++--------------+---------------+
+| Fluentd DaemonSet |
+| (Collect Logs from Nodes) |
++--------------+---------------+
+^
+|
++--------------+---------------+
+| Kubernetes Nodes & Pods |
+| (Generate Application Logs) |
++------------------------------+
+
+
+---
+
+### 🧠 Example Use Cases
+
+- View Pod logs in Kibana instead of using `kubectl logs`.
+- Filter logs by namespace, service, or error keywords.
+- Monitor failed pods or error trends over time.
+
+---
+
+## 🔍 4. Jaeger — Distributed Tracing
+
+### 🌐 What is Jaeger?
+
+**Jaeger** is a **distributed tracing system**.  
+It helps track the flow of requests across multiple **microservices**.  
+This is very useful when one request passes through many services — for example:
+
+> Frontend → Auth Service → Payment Service → Notification Service
+
+You can use Jaeger to **trace how long each service took** and find **bottlenecks** or **failures**.
+
+---
+
+### 🧩 Jaeger Architecture Diagram
+
++------------------------------+
+| Jaeger UI |
+| (View Traces) |
++--------------+---------------+
+|
+v
++--------------+---------------+
+| Query Service |
+| (Fetch trace data) |
++--------------+---------------+
+|
+v
++--------------+---------------+
+| Collector Service |
+| (Receives spans & traces) |
++--------------+---------------+
+^
+|
++--------------+---------------+
+| Jaeger Agent DaemonSet |
+| (Receives traces from Apps) |
++--------------+---------------+
+^
+|
++--------------+---------------+
+| Instrumented Applications |
+| (Send Trace Data) |
++------------------------------+
+
+
+---
+
+### 🧠 Example Use Cases
+
+- Find which microservice is slowing down your request.  
+- Check if all services are working properly in a chain.  
+- Visualize request flow between services.
+
+---
+
+## ⚙️ 5. How DaemonSets Are Used in Monitoring and Logging
+
+| Tool | Role in DaemonSet |
+|------|-------------------|
+| **Fluentd** | Runs as DaemonSet to collect logs from all nodes. |
+| **Node Exporter** | Runs as DaemonSet to collect system metrics. |
+| **Jaeger Agent** | Runs as DaemonSet to collect traces from local services. |
+
+DaemonSets ensure that **every node** has a **collector agent**, so **no logs or metrics are missed**.
+
+---
+
+## 🌐 6. Combined Architecture (High-Level Overview)
+
+                        +------------------------+
+                        |       Grafana          |
+                        | (Visualize Metrics)    |
+                        +-----------+------------+
+                                    |
+                                    v
+                        +-----------+------------+
+                        |       Prometheus       |
+                        | (Scrape Metrics)       |
+                        +-----------+------------+
+                                    |
+                 +------------------+------------------+
+                 |   Node Exporters / App Metrics       |
+                 |   (DaemonSet on all nodes)           |
+                 +------------------+------------------+
+                                    |
+                                    |
+    +------------------------------------------------------------+
+    |                      Kubernetes Cluster                    |
+    |                                                            |
+    |  +----------------+     +----------------+   +-------------+|
+    |  |   Fluentd DS   | --> | Elasticsearch  | <-|   Kibana    ||
+    |  +----------------+     +----------------+   +-------------+|
+    |                                                            |
+    |    ↑ Collect Logs                              Show Logs ↓  |
+    +------------------------------------------------------------+
+                                    |
+                                    v
+                        +------------------------+
+                        |        Jaeger          |
+                        | (Distributed Tracing)  |
+                        +------------------------+
+
+
+---
+
+## 🧠 7. Summary
+
+| Concept | Description |
+|----------|-------------|
+| **DaemonSet** | Ensures one Pod per node for monitoring/logging/tracing. |
+| **Prometheus** | Collects and stores metrics. |
+| **Grafana** | Visualizes metrics in dashboards. |
+| **Fluentd** | Collects logs from all nodes. |
+| **Elasticsearch** | Stores logs and makes them searchable. |
+| **Kibana** | Visualizes logs in a web UI. |
+| **Jaeger** | Traces requests across microservices. |
+
+---
+
+## 🚀 8. Practical Example (Typical Setup)
+
+In a real Kubernetes cluster:
+- **Fluentd** DaemonSet → Collects logs  
+- **Prometheus** → Collects metrics  
+- **Grafana** → Displays dashboards  
+- **Jaeger** → Traces requests across services  
+
+Together, they provide **Complete Observability**:
+> **Metrics + Logs + Traces**
+
+---
+
+## 🧩 Conclusion
+
+- **DaemonSets** are powerful for running agents on every node.  
+- **Prometheus + Grafana** monitor the health and performance of your cluster.  
+- **EFK Stack** manages and visualizes logs easily.  
+- **Jaeger** provides complete visibility into microservice request flows.  
+
+👉 These tools together help DevOps teams **detect issues faster**, **improve system reliability**, and **maintain healthy clusters**.
+
+---
+

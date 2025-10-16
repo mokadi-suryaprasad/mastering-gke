@@ -1,7 +1,5 @@
 # ☸️ Day 16 — Pod Priority & Preemption in Kubernetes
 
-![Pod Priority & Preemption](https://kubernetes.io/images/docs/pod-priority-preemption.svg)
-
 ## 🎯 Objective
 Learn how Kubernetes decides **which Pods are more important** when resources are low using **Pod Priority and Preemption**.
 

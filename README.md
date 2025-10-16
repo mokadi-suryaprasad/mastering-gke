@@ -42,8 +42,8 @@ This repository is designed for **DevOps Engineers**, **Cloud Architects**, and 
 | 💾 **Day 11** | Resource Quotas & Limits in GKE |
 | 💾 **Day 12** | Storage | Persistent Volumes and PersistentVolumeClaims |
 | 🗄️ **Day 13** | Cloud SQL Integration | Connect GKE Pods securely to Cloud SQL |
-| 📍 **Day 14** | Node Affinity | Schedule Pods intelligently using node labels |
-| 📊 **Day 15** |  |
+| 📍 **Day 14** | Node Affinity & NodeSelector | Schedule Pods Intelligently Using Node Labels |
+| 📊 **Day 15** | Taints and Tolerations | Control Pod Scheduling Using Node Restrictions |
 | 🧾 **Day 16** |  |
 | 🔍 **Day 17** |  |
 | ⚡ **Day 18** | Autoscaling | Horizontal & Vertical Pod Autoscalers |

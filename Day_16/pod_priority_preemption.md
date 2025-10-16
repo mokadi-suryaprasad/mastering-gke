@@ -114,7 +114,81 @@ You’ll see that **noncritical Pods were evicted** and critical Pod is schedule
 
 ---
 
-## 🧩 Step 4: Real-World Use Cases
+## ⚙️ Step 4: Using Pod Priority in Deployments
+
+You can also assign priorityClassName in Deployment Pod templates. All replicas inherit the priority and preemption behavior.
+
+### High-Priority Deployment
+
+``` yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: critical-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: critical-app
+  template:
+    metadata:
+      labels:
+        app: critical-app
+    spec:
+      priorityClassName: high-priority
+      containers:
+      - name: nginx
+        image: nginx
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "256Mi"
+```
+### Low-Priority Deployment
+
+``` yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: noncritical-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: noncritical-app
+  template:
+    metadata:
+      labels:
+        app: noncritical-app
+    spec:
+      priorityClassName: low-priority
+      containers:
+      - name: nginx
+        image: nginx
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "256Mi"
+```
+✅ How it works:
+
+- Kubernetes schedules Pods based on priorityClassName and available resources.
+
+- If high-priority Pods cannot schedule, it evicts lower-priority Pods automatically.
+
+- Scaling a Deployment inherits the same priority rules.
+
+💡 Best Practices:
+
+- Combine with Node Affinity & Taints/Tolerations for dedicated resources.
+
+- Always define requests/limits for accurate preemption behavior.
+
+- Only assign high priority to critical workloads to avoid excessive evictions.
+
+---
+
+## 🧩 Step 5: Real-World Use Cases
 
 | Scenario | Example |
 |----------|---------|
@@ -125,10 +199,11 @@ You’ll see that **noncritical Pods were evicted** and critical Pod is schedule
 
 ---
 
-## 🧹 Step 5: Clean Up
+## 🧹 Step 6: Clean Up
 
 ```bash
 kubectl delete pod critical-pod noncritical-pod
+kubectl delete deployment critical-deployment noncritical-deployment
 kubectl delete priorityclass high-priority low-priority
 ```
 
@@ -136,13 +211,15 @@ kubectl delete priorityclass high-priority low-priority
 
 ## 📘 Summary
 
-| Concept | Description |
-|---------|-------------|
-| **Pod Priority** | Numeric value indicating Pod importance |
-| **Preemption** | Evict lower-priority Pods to schedule higher-priority Pods |
-| **PriorityClass** | Defines a reusable class for assigning Pod priorities |
-| **Requests & Limits** | Combined with Priority, determines if Pod can be scheduled |
-| **Eviction** | Automatic removal of low-priority Pods when resources are insufficient |
+| Concept               | Description                                                            |
+| --------------------- | ---------------------------------------------------------------------- |
+| **Pod Priority**      | Numeric value indicating Pod importance                                |
+| **Preemption**        | Evict lower-priority Pods to schedule higher-priority Pods             |
+| **PriorityClass**     | Defines a reusable class for assigning Pod priorities                  |
+| **Requests & Limits** | Combined with Priority, determines if Pod can be scheduled             |
+| **Eviction**          | Automatic removal of low-priority Pods when resources are insufficient |
+| **Deployments**       | All replicas inherit priority and preemption behavior                  |
+
 
 ---
 

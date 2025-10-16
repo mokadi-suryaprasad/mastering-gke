@@ -43,9 +43,9 @@ This repository is designed for **DevOps Engineers**, **Cloud Architects**, and 
 | 💾 **Day 12** | Storage | Persistent Volumes and PersistentVolumeClaims |
 | 🗄️ **Day 13** | Cloud SQL Integration | Connect GKE Pods securely to Cloud SQL |
 | 📍 **Day 14** | Node Affinity | Schedule Pods intelligently using node labels |
-| 📊 **Day 15** | Monitoring (Prometheus & Grafana) | Collect and visualize cluster & app metrics |
-| 🧾 **Day 16** | Logging (EFK Stack) | Centralized logging with Elasticsearch, Fluentd, Kibana |
-| 🔍 **Day 17** | Tracing (Jaeger) | Distributed tracing for microservices |
+| 📊 **Day 15** |  |
+| 🧾 **Day 16** |  |
+| 🔍 **Day 17** |  |
 | ⚡ **Day 18** | Autoscaling | Horizontal & Vertical Pod Autoscalers |
 | 🔐 **Day 19** | Secrets Management | Secure credentials with Kubernetes Secrets, GCP Secret Manager, and HashiCorp Vault |
 | 🧱 **Day 20** | Network Policies | Restrict pod-to-pod communication |

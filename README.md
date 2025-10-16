@@ -44,7 +44,7 @@ This repository is designed for **DevOps Engineers**, **Cloud Architects**, and 
 | 🗄️ **Day 13** | Cloud SQL Integration | Connect GKE Pods securely to Cloud SQL |
 | 📍 **Day 14** | Node Affinity & NodeSelector | Schedule Pods Intelligently Using Node Labels |
 | 📊 **Day 15** | Taints and Tolerations | Control Pod Scheduling Using Node Restrictions |
-| 🧾 **Day 16** |  |
+| 🧾 **Day 16** | Pod Priority & Preemption | Learn how Kubernetes decides which Pods are more important when resources are low |
 | 🔍 **Day 17** |  |
 | ⚡ **Day 18** | Autoscaling | Horizontal & Vertical Pod Autoscalers |
 | 🔐 **Day 19** | Secrets Management | Secure credentials with Kubernetes Secrets, GCP Secret Manager, and HashiCorp Vault |

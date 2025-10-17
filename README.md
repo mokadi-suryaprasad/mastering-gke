@@ -46,7 +46,7 @@ This repository is designed for **DevOps Engineers**, **Cloud Architects**, and 
 | 📊 **Day 15** | Taints and Tolerations | Control Pod Scheduling Using Node Restrictions |
 | 🧾 **Day 16** | Pod Priority & Preemption | Learn how Kubernetes decides which Pods are more important when resources are low |
 | 🔍 **Day 17** | Autoscaling | Horizontal & Vertical Pod Autoscalers |
-| ⚡ **Day 18** | GKE Cluster Autoscaler (Node Level Scaling) |
+| ⚡ **Day 18** | GKE Cluster Autoscaler | (Node Level Scaling) |
 | 🔐 **Day 19** | Secrets Management | Secure credentials with Kubernetes Secrets, GCP Secret Manager, and HashiCorp Vault |
 | 🧱 **Day 20** | Network Policies | Restrict pod-to-pod communication |
 | 🚀 **Day 21** | GitOps with ArgoCD | Continuous delivery for GKE workloads |

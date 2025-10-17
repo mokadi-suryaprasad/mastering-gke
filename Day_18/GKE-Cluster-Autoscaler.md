@@ -115,8 +115,5 @@ gcloud container node-pools delete scalable-pool --cluster my-cluster
 - Observe scaling events in the GCP Console.
 - Record before and after node count snapshots.
 
----
 
-## 🏁 Next Steps
-Next: **Day 19 - GKE Node Auto-Provisioning (Advanced Scaling Mechanism)**
 

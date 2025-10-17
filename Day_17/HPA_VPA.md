@@ -249,10 +249,9 @@ kubectl describe vpa
 
 ## 🚀 Summary Table
 
-```text
 | Autoscaler             | Purpose               | Works On   | Example Trigger    |
 | ---------------------- | --------------------- | ---------- | ------------------ |
 | **HPA**                | Adjusts Pod Count     | Deployment | High CPU           |
 | **VPA**                | Adjusts Pod Resources | Container  | Memory pressure    |
 | **Cluster Autoscaler** | Adjusts Node Count    | Cluster    | Unschedulable Pods |
-```
+

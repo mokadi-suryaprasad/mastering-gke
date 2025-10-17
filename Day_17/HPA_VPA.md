@@ -9,13 +9,12 @@ This helps your app stay fast, stable, and cost-efficient — even when traffic 
 
 There are three main types of scaling in Kubernetes:
 
-```text
+
 | Type                                | Scales             | Example                       |
 | ----------------------------------- | ------------------ | ----------------------------- |
 | **HPA (Horizontal Pod Autoscaler)** | Number of Pods     | Adds/removes Pods             |
 | **VPA (Vertical Pod Autoscaler)**   | CPU/Memory per Pod | Increases Pod resources       |
 | **Cluster Autoscaler**              | Number of Nodes    | Adds/removes Nodes in cluster |
-```
 
 ---
 
@@ -145,13 +144,13 @@ Instead of scaling Pods, VPA changes each Pod’s **resource allocation**.
 
 ### VPA Modes
 
-```text
+
 | Mode        | Description                               |
 | ----------- | ----------------------------------------- |
 | **Off**     | Only gives recommendations                |
 | **Auto**    | Automatically updates Pods                |
 | **Initial** | Applies recommendations only at Pod start |
-```
+
 
 ### Example: VPA for NGINX Deployment
 
@@ -196,14 +195,13 @@ kubectl describe vpa nginx-vpa
 
 ## ⚖️ 4. HPA vs VPA
 
-```text
 | Feature      | HPA                  | VPA                            |
 | ------------ | -------------------- | ------------------------------ |
 | Scales       | Number of Pods       | CPU/Memory per Pod             |
 | Metric       | CPU/Memory/Custom    | Historical resource usage      |
 | Use Case     | Varying load/traffic | Constant load but wrong sizing |
 | Common Setup | Web servers          | Databases, back-end APIs       |
-```
+
 
 ---
 

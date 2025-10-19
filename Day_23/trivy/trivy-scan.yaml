@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: trivy-scan
+spec:
+  containers:
+    - name: trivy
+      image: aquasec/trivy:latest
+      command: ["trivy", "image", "--format", "json", "-o", "/tmp/report.json", "nginx:1.21"]
+      volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+  restartPolicy: Never
+  volumes:
+    - name: tmp
+      emptyDir: {}

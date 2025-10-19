@@ -105,5 +105,3 @@ Kyverno admission controller automatically **blocks non-compliant resources**.
 - Integrates seamlessly into **CI/CD pipelines** for proactive security  
 
 ---
-
-**Next → Day 24:** Observability & Monitoring — Prometheus & Grafana 📊

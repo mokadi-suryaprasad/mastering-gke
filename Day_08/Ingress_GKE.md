@@ -8,14 +8,14 @@
 
 In Kubernetes (GKE), **Services** expose your Pods:
 
-- **NodePort** exposes on every node but requires knowing node IPs  
-- **LoadBalancer** creates one IP per service → not scalable  
+* **NodePort** exposes on every node but requires knowing node IPs
+* **LoadBalancer** creates one IP per service → not scalable
 
 **Ingress** solves this:
 
-- Expose **multiple services via a single IP**  
-- Support **path-based or host-based routing**  
-- Handle **SSL/TLS termination** at the Ingress controller
+* Expose **multiple services via a single IP**
+* Support **path-based or host-based routing**
+* Handle **SSL/TLS termination** at the Ingress controller
 
 > Think of Ingress as a **smart router** for your cluster.
 
@@ -23,12 +23,12 @@ In Kubernetes (GKE), **Services** expose your Pods:
 
 ## 2️⃣ Key Features of Ingress
 
-| Feature | Description |
-|---------|-------------|
-| Path-based routing | `/frontend` → frontend-service, `/backend` → backend-service |
-| Host-based routing | `app1.example.com` → service1, `app2.example.com` → service2 |
-| SSL/TLS termination | Offload SSL at Ingress, Pods get plain HTTP traffic |
-| Single external IP | Multiple services accessible via one IP |
+| Feature             | Description                                                  |
+| ------------------- | ------------------------------------------------------------ |
+| Path-based routing  | `/frontend` → frontend-service, `/backend` → backend-service |
+| Host-based routing  | `app1.example.com` → service1, `app2.example.com` → service2 |
+| SSL/TLS termination | Offload SSL at Ingress, Pods get plain HTTP traffic          |
+| Single external IP  | Multiple services accessible via one IP                      |
 
 ---
 
@@ -36,9 +36,9 @@ In Kubernetes (GKE), **Services** expose your Pods:
 
 We will deploy:
 
-1. **Frontend App** (nginx)  
-2. **Backend App** (simple Python Flask)  
-3. **Ingress** with path-based routing  
+1. **Frontend App** (nginx)
+2. **Backend App** (simple Python Flask)
+3. **Ingress** with path-based routing
 4. **TLS Secret** for HTTPS
 
 ---
@@ -173,7 +173,7 @@ Generate a self-signed certificate:
 ```bash
 openssl req -x509 -nodes -days 365 \
 -newkey rsa:2048 -keyout tls.key -out tls.crt \
--subj "/CN=example.com/O=example"
+-subj "/CN=suryadev.shop/O=suryadev.shop"
 ```
 
 Create TLS secret in Kubernetes:
@@ -197,14 +197,14 @@ metadata:
   name: demo-ingress
   namespace: ingress-demo
   annotations:
-    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.class: "gce"  # or "nginx" if using nginx
 spec:
   tls:
   - hosts:
-    - example.com
+    - suryadev.shop
     secretName: tls-secret
   rules:
-  - host: example.com
+  - host: suryadev.shop
     http:
       paths:
       - path: /frontend
@@ -238,16 +238,16 @@ kubectl get ingress -n ingress-demo
 kubectl describe ingress demo-ingress -n ingress-demo
 ```
 
-- External IP will be shown in `kubectl get ingress`  
-- Access in browser (replace IP with your external IP):
+* External IP will be shown in `kubectl get ingress`
+* Access in browser (replace IP with your external IP):
 
 ```
 https://<EXTERNAL_IP>/frontend
 https://<EXTERNAL_IP>/backend
 ```
 
-- HTTPS is terminated at Ingress using TLS secret  
-- Path-based routing sends traffic to correct service
+* HTTPS is terminated at Ingress using TLS secret
+* Path-based routing sends traffic to correct service
 
 ---
 
@@ -265,18 +265,18 @@ frontend-service           backend-service
   frontend Pods               backend Pods
 ```
 
-- One IP serves multiple services  
-- TLS terminates at Ingress, Pods receive HTTP
+* One IP serves multiple services
+* TLS terminates at Ingress, Pods receive HTTP
 
 ---
 
 ## ✅ Summary
 
-- **Ingress** exposes multiple services with **one external IP**  
-- Supports **path-based and host-based routing**  
-- Enables **TLS/SSL termination** for secure traffic  
-- Essential for **production deployments** in GKE  
-- Can be combined with **any number of services** using path or host rules
+* **Ingress** exposes multiple services with **one external IP**
+* Supports **path-based and host-based routing**
+* Enables **TLS/SSL termination** for secure traffic
+* Essential for **production deployments** in GKE
+* Can be combined with **any number of services** using path or host rules
 
 ---
 
@@ -305,13 +305,4 @@ kubectl get ingress -n ingress-demo
 kubectl describe ingress demo-ingress -n ingress-demo
 ```
 
----
-
-This gives you a **live working deployment** with:
-
-- Frontend and backend services  
-- Ingress with path-based routing  
-- TLS termination for HTTPS traffic  
-
-You can now **test, update, or expand** to host multiple services on the same IP in GKE.
-
+This README provides a **live working deployment** with frontend/backend services, path-based routing, and TLS termination on GKE Ingress.

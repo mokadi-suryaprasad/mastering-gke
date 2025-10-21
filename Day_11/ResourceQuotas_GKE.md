@@ -1,4 +1,4 @@
-# 📏 Day 10 — Resource Quotas & Limits in GKE
+# 📏 Day 11 — Resource Quotas & Limits in GKE
 
 ## 🧠 Topic: Namespace-level and Pod-level Resource Management
 
@@ -15,7 +15,7 @@
 ### 1.2 Key Concepts
 
 | Concept         | Purpose |
-|-----------------|---------|
+|-----------------|----------|
 | **ResourceQuota** | Sets total CPU, memory, pods, services, etc., allowed in a namespace |
 | **Namespace**     | Logical grouping of resources; quota applies per namespace |
 | **Hard limits**   | Maximum resources allowed for the namespace |
@@ -46,7 +46,6 @@ spec:
 ```
 
 **Explanation:**
-
 - **Pods:** max 5 Pods in `dev` namespace  
 - **Services:** max 2 Services  
 - **Requests:** total CPU ≤ 2, memory ≤ 2Gi  
@@ -59,27 +58,6 @@ kubectl apply -f namespace.yaml
 kubectl apply -f resource-quota.yaml
 kubectl describe quota dev-quota -n dev
 kubectl get all -n dev
-```
-
----
-
-### 1.5 Visual Diagram
-
-```
-Namespace: dev
--------------------------------
-ResourceQuota:
-  pods: 5
-  services: 2
-  requests.cpu: 2
-  requests.memory: 2Gi
-  limits.cpu: 4
-  limits.memory: 4Gi
-
-Pods:
-  pod1: requests=200m/256Mi
-  pod2: requests=300m/512Mi
-  ...
 ```
 
 ---
@@ -114,7 +92,6 @@ spec:
 ```
 
 **Explanation:**
-
 - Requests: Pod **guaranteed 250m CPU & 256Mi memory**  
 - Limits: Pod **cannot use more than 500m CPU & 512Mi memory**  
 
@@ -141,57 +118,78 @@ spec:
         memory: "1Gi"
 ```
 
-- Kubernetes checks **ResourceQuota** first, then **Pod requests/limits**.  
-- If total requests exceed namespace quota → Pod creation fails.  
-
 ---
 
-### 2.4 Commands to Apply & Monitor
+## 3️⃣ Part 3: Resource Limits in Deployments
+
+### 3.1 Why Use Resource Limits in Deployments?
+
+- Defines consistent resource boundaries for all Pods in a ReplicaSet.  
+- Prevents over-provisioning when scaling deployments.  
+- Ensures stable workloads under high traffic.
+
+### 3.2 Example: Deployment with Resource Requests & Limits
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+  namespace: dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:stable
+        resources:
+          requests:
+            cpu: "300m"
+            memory: "256Mi"
+          limits:
+            cpu: "600m"
+            memory: "512Mi"
+```
+
+### 3.3 Commands to Apply & Monitor
 
 ```bash
-kubectl apply -f pod1.yaml
-kubectl apply -f pod2.yaml
-kubectl describe pod pod1 -n dev
+kubectl apply -f nginx-deploy.yaml
+kubectl get pods -n dev
+kubectl describe deployment nginx-deploy -n dev
 kubectl describe quota dev-quota -n dev
-kubectl get all -n dev
-```
-
----
-
-### 2.5 Visual Diagram
-
-```
-Namespace: dev (ResourceQuota)
---------------------------------
-Total requests.cpu = 2
-Total requests.memory = 2Gi
-
-Pods:
- pod1: requests=250m/256Mi, limits=500m/512Mi
- pod2: requests=500m/512Mi, limits=1/1Gi
- ...
 ```
 
 ---
 
 ## ✅ Summary
 
-1. **Namespace-level ResourceQuota** → Limits total Pods, Services, CPU, memory  
-2. **Pod-level Requests & Limits** → Guarantees and caps per Pod  
-3. Combined → Ensures **fair usage and stable cluster performance**  
-4. Monitor with `kubectl describe quota` and `kubectl describe pod`  
+1. **Namespace-level ResourceQuota** → Limits total Pods, Services, CPU, memory.  
+2. **Pod-level Requests & Limits** → Guarantees and caps per Pod.  
+3. **Deployment-level Limits** → Scalable and consistent resource control.  
+4. Combined → Ensures **fair usage and stable cluster performance**.  
+5. Monitor with `kubectl describe quota`, `kubectl describe pod`, and `kubectl describe deploy`.
 
 ---
 
-### 3️⃣ Quick Reference Commands
+## ⚙️ Quick Reference Commands
 
 ```bash
 kubectl apply -f namespace.yaml
 kubectl apply -f resource-quota.yaml
 kubectl apply -f pod1.yaml
 kubectl apply -f pod2.yaml
+kubectl apply -f nginx-deploy.yaml
 kubectl describe quota dev-quota -n dev
 kubectl describe pod pod1 -n dev
+kubectl describe deployment nginx-deploy -n dev
 kubectl get all -n dev
 ```
 

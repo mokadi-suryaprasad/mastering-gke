@@ -53,19 +53,9 @@ kubectl get svc -n default
 kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
 kubectl get gateway -n default
 ```
-
 ---
 
-## ✅ 6. Delete Auto-Created VirtualServices (To Avoid Conflict)
-
-```bash
-kubectl delete virtualservice details productpage reviews ratings -n default || true
-kubectl get virtualservice -n default
-```
-
----
-
-## ✅ 7. Apply Consolidated VirtualService (All v1)
+## ✅ 6. Apply Consolidated VirtualService (All v1)
 
 ```bash
 kubectl apply -f samples/bookinfo/networking/virtual-service-all-v1.yaml
@@ -74,7 +64,7 @@ kubectl get virtualservice -n default
 
 ---
 
-## ✅ 8. Create DestinationRule for Reviews
+## ✅ 7. Create DestinationRule for Reviews
 
 Create file: `destinationrule-reviews.yaml`
 
@@ -104,7 +94,7 @@ kubectl get destinationrule -n default
 
 ---
 
-## ✅ 9. Create VirtualService for Reviews 80/20 Traffic Split
+## ✅ 8. Create VirtualService for Reviews 80/20 Traffic Split
 
 Create file: `virtualservice-reviews-80-20.yaml`
 
@@ -140,7 +130,7 @@ kubectl get virtualservice reviews -n default
 
 ---
 
-## ✅ 10. Test App Using Port Forward
+## ✅ 9. Test App Using Port Forward
 
 ```bash
 kubectl port-forward svc/bookinfo-gateway-istio 8080:80 -n default
@@ -154,7 +144,7 @@ http://localhost:8080/productpage
 
 ---
 
-## ✅ 11. Optional: Redirect `/` to `/productpage`
+## ✅ 10. Optional: Redirect `/` to `/productpage`
 
 Create file: `root-redirect.yaml`
 
@@ -203,7 +193,7 @@ kubectl exec -it -n default $POD -- curl -sS http://reviews:9080
 
 ---
 
-## ✅ 13. Cleanup
+## ✅ 11. Cleanup
 
 ```bash
 kubectl delete -f virtualservice-reviews-80-20.yaml

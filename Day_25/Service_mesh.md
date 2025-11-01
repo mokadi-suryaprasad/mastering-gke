@@ -1,6 +1,6 @@
 # Service Mesh Basics (Beginner-Friendly Explanation)
 
-This document covers the following topics in simple, clear English:
+This document covers the following topics:
 
 * What are Admission Controllers?
 * What are Sidecar Containers?
@@ -303,71 +303,6 @@ Service A ----> Envoy A ===mTLS==== Envoy B ----> Service B
 ```
 
 Both proxies authenticate and encrypt the traffic.
-
----
-
-## ✅ Full Hands-On Istio Setup Guide
-
-### **Step 1: Install Istio CLI**
-
-```bash
-o curl -L https://istio.io/downloadIstio | sh -
-```
-
-### **Step 2: Add istioctl to PATH**
-
-```bash
-o export PATH="$PATH:~/istio-*/bin"
-```
-
-### **Step 3: Install Istio Control Plane**
-
-```bash
-o istioctl install --set profile=demo -y
-```
-
-### **Step 4: Enable Sidecar Injection**
-
-```bash
-o kubectl label ns default istio-injection=enabled
-```
-
-### **Step 5: Deploy Sample App**
-
-```bash
-o kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
-```
-
-### **Step 6: Open Kiali Dashboard**
-
-```bash
-o istioctl dashboard kiali
-```
-
-### **Step 7: Apply VirtualService Example**
-
-```yaml
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  name: reviews
-spec:
-  hosts:
-  - reviews
-  http:
-  - route:
-    - destination:
-        host: reviews
-        subset: v1
-      weight: 80
-    - destination:
-        host: reviews
-        subset: v2
-      weight: 20
-```
-
-This routes **80% traffic to v1 and 20% to v2**.
-
 ---
 
 ## ✅ Real-Time Interview Q&A on Istio

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gke-filestore-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: filestore-storage-class   # ✅ Correct StorageClass
+  resources:
+    requests:
+      storage: 1Ti

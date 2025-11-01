@@ -54,12 +54,12 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: filestore-storage-class
-provisioner: filestore.csi.storage.gke.io # File Store CSI Driver
+provisioner: filestore.csi.storage.gke.io
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 parameters:
-  tier: standard # Allowed values standard, premium, or enterprise
-  network: default # The network parameter can be used when provisioning Filestore instances on non-default VPCs. Non-default VPCs require special firewall rules to be set up.
+  tier: standard
+  network: main   # ✅ Use your VPC network name (from gcloud output)
 ```
 
 ## Step-06: Other YAML files are same as previous section

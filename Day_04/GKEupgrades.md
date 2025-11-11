@@ -268,3 +268,6 @@ spec:
 
 ### One‑liner you can say in interviews
 > “We upgraded **GKE Stable** from **1.31.x → 1.32.y**: control plane first, then node pools with **surge 2/0**, protected by **PDBs** and **maintenance windows**, validated SLOs for **48h**, and kept a **blue/green** fallback.”
+
+- **cordon** marks the node as unschedulable so new pods cannot be scheduled, but existing pods continue running.
+- **drain** safely evicts the running pods and reschedules them to other nodes, used during node upgrades or replacement.

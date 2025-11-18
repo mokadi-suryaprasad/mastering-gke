@@ -73,7 +73,7 @@ You manage nodes and node pools.
 
 ---
 
-## 5. Service Accounts (Easy)
+## 5. Service Accounts
 
 Service Accounts help pods talk to Google Cloud services.
 
@@ -84,7 +84,7 @@ It allows a Kubernetes service account to use a Google Cloud service account **w
 
 ---
 
-## 6. How to Deploy an App in GKE (Very Easy)
+## 6. How to Deploy an App in GKE 
 
 1. Build Docker image and push to Artifact Registry.
 2. Create Deployment and Service YAML files.
@@ -105,7 +105,7 @@ kubectl get pods
 
 ---
 
-## 7. Kubernetes Objects (Simple)
+## 7. Kubernetes Objects 
 
 ### **Deployment**
 
@@ -144,8 +144,7 @@ Use when you want only special pods to run on special nodes.
 
 ---
 
-## 9. Service Types (Easy)
-
+## 9. Service Types 
 * **ClusterIP** → Inside cluster only.
 * **NodePort** → Open on every node (port 30000+).
 * **LoadBalancer** → Cloud Load Balancer.
@@ -153,7 +152,7 @@ Use when you want only special pods to run on special nodes.
 
 ---
 
-## 10. Ingress (Very Easy)
+## 10. Ingress
 
 Ingress sends traffic from internet → Load Balancer → Service → Pod.
 It supports:
@@ -164,7 +163,7 @@ It supports:
 
 ---
 
-## 11. Storage (Easy)
+## 11. Storage 
 
 * **PV** → Actual storage.
 * **PVC** → Request storage.

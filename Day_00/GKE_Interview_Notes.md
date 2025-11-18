@@ -421,6 +421,37 @@ Tell me if you want this:
 * **Cordon:** Node is marked "No new pods".
 * **Drain:** Remove all pods safely from node.
 
+## Cordon and Drain in Kubernetes (GKE)
+
+## Cordon
+Cordon marks a Kubernetes node as **Unschedulable**.  
+This means **no new pods** will be scheduled on that node, but existing pods continue running.
+
+### Key Points
+- Stops new pods from being scheduled.
+- Existing pods remain running.
+- Used before maintenance, debugging, or upgrades.
+
+### Command
+```bash
+kubectl cordon <node-name>
+```
+# Drain in Kubernetes
+
+## Drain
+Drain safely evicts all pods from a node, making the node empty and ready for maintenance or replacement.
+
+## What Drain Does
+- Evicts pods and reschedules them to other healthy nodes.
+- Respects PodDisruptionBudgets (PDB).
+- Ignores DaemonSets.
+- Can delete unmanaged pods when forced.
+
+## Command
+```bash
+kubectl drain <node-name> --ignore-daemonsets --force --delete-emptydir-data
+```
+
 ---
 
 ## 5. Deploy Pod on Specific Node
